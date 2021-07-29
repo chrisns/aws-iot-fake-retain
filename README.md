@@ -20,6 +20,7 @@ This workaround requires you to specify a list of topics (or wildcards) that wil
 
 ## TODO
 
+- [ ] only scan if theres a wildcard in the topics
 - [ ] source endpoint address either dynamically or from env var
 
 ## Thanks
