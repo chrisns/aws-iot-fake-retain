@@ -1,0 +1,66 @@
+service: aws-iot-fake-retain
+frameworkVersion: '2'
+
+provider: 
+  name: aws
+  runtime: nodejs14.x
+  stage: production
+  region: eu-west-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource: "arn:aws:dynamodb:*:*:table/iotRetain"
+    - Effect: Allow
+      Action:
+        - iot:Publish
+      Resource: "*"
+  environment:
+    IOT_ENDPOINT: "a1o5j7svq7l99k-ats.iot.eu-west-2.amazonaws.com"
+
+functions:
+  retainer:
+    handler: index.retainer
+    events:
+      - iot:
+          sql: |
+            SELECT 
+              principal() AS principal, 
+              topic() AS topic, 
+              * AS payload 
+            FROM 
+              'zweu/#' 
+            WHERE
+              endswith(principal(), 'aws-iot-fake-retain-production-retainer') = false
+
+  recaller:
+    handler: index.recaller
+    events:
+      - iot:
+          sql: |
+            SELECT * FROM '$aws/events/subscriptions/subscribed/+' 
+
+package:
+  exclude:
+    - "**"
+  include:
+    - index.js
+
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: iotRetain
+        AttributeDefinitions:
+          - AttributeName: topic
+            AttributeType: S
+        KeySchema:
+          - AttributeName: topic
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
