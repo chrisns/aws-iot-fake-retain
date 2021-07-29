@@ -9,9 +9,8 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:Query
         - dynamodb:Scan
-        - dynamodb:GetItem
+        - dynamodb:batchGetItem
         - dynamodb:PutItem
       Resource: "arn:aws:dynamodb:*:*:table/iotRetain"
     - Effect: Allow
