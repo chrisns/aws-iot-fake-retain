@@ -9,6 +9,6 @@
   "author": "Chris Nesbitt-Smith",
   "license": "MIT",
   "devDependencies": {
-    "serverless": "^2.52.1"
+    "serverless": "^2.53.0"
   }
 }
