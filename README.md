@@ -1,3 +1,5 @@
+> **ARCHIVED, after years of putting up with it just after I made this, [AWS announced IoT now supports retained messages](https://aws.amazon.com/about-aws/whats-new/2021/08/aws-iot-core-supports-mqtt-retained-messages/) great, kinda :)**
+ 
 # AWS IoT fake mqtt retain
 
 ## Context
